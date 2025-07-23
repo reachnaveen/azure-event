@@ -1,0 +1,24 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: azure-eventhub-listener-scaler
+  namespace: default # Or your target namespace
+spec:
+  scaleTargetRef:
+    name: azure-eventhub-listener
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  triggers:
+  - type: azure-eventhub
+    metadata:
+      connectionFromEnv: EVENTHUBS_CONNECTION_STRING # Name of the environment variable
+      eventHubName: ${EVENTHUBS_NAME}
+      consumerGroup: $Default
+      unprocessedEventThreshold: '64'
+  - type: azure-servicebus
+    metadata:
+      queueName: ${SERVICEBUS_QUEUE_NAME}
+      connectionFromEnv: SERVICEBUS_CONNECTION_STRING
+      queueLength: '5'
