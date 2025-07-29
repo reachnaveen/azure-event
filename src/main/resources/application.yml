@@ -1,19 +1,34 @@
+server:
+  port: 8080
+
 spring:
   cloud:
+    function:
+      definition: consumeServiceBusMessage
+
     azure:
-      eventhubs:
-        connection-string: ${EVENTHUBS_CONNECTION_STRING}
       servicebus:
         connection-string: ${SERVICEBUS_CONNECTION_STRING}
+
     stream:
+      default-binder: servicebus
+      binders:
+        servicebus:
+          type: servicebus
+          environment:
+            spring:
+              cloud:
+                azure:
+                  servicebus:
+                    connection-string: ${SERVICEBUS_CONNECTION_STRING}
       bindings:
-        consume-in-0:
-          destination: ${EVENTHUBS_NAME}
         consumeServiceBusMessage-in-0:
           destination: ${SERVICEBUS_QUEUE_NAME}
-      eventhubs:
-        bindings:
-          consume-in-0:
-            consumer:
-              checkpoint-storage-account: ${CHECKPOINT_STORAGE_ACCOUNT}
-              checkpoint-container: ${CHECKPOINT_CONTAINER}
+          content-type: application/json
+          consumer:
+            auto-complete: false
+
+logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+    com.azure.spring.integration: DEBUG
