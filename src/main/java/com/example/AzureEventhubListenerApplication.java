@@ -40,6 +40,7 @@ public class AzureEventhubListenerApplication {
 
     // @GetMapping("/consume")
     // public String consumeMessage() {
+    //     System.out.println("Consuming message from queue: " + queueName);
     //     try (com.azure.messaging.servicebus.ServiceBusReceiverClient receiverClient = new ServiceBusClientBuilder()
     //             .connectionString(connectionString)
     //             .receiver()
@@ -48,7 +49,7 @@ public class AzureEventhubListenerApplication {
     //         com.azure.messaging.servicebus.ServiceBusReceivedMessage receivedMessage = receiverClient.receiveMessages(1).stream().findFirst().orElse(null);
     //         if (receivedMessage != null) {
     //             String body = receivedMessage.getBody().toString();
-    //             receiverClient.complete(receivedMessage.getLockToken());
+    //             receiverClient.complete(receivedMessage);
     //             return "Received message: " + body;
     //         } else {
     //             return "No messages available";
